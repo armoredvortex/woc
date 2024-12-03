@@ -1,0 +1,17 @@
+Adding salt to hashing:
+https://auth0.com/blog/adding-salt-to-hashing-a-better-way-to-store-passwords/
+
+Was Your Vote counted?:
+https://www.youtube.com/watch?v=BYRTvoZ3Rho
+
+Why Electronic voting is a bad idea:
+https://www.youtube.com/watch?v=w3_0x6oaDmI
+
+Online voting system using Homomorphic Encryption:
+https://www.itm-conferences.org/articles/itmconf/pdf/2020/02/itmconf_icacc2020_03023.pdf
+
+Similar:
+https://github.com/Ernstsen/EVHE
+https://github.com/CryptoVarna/phe-voting-js
+https://github.com/lchenbb/DSEProject
+https://github.com/rahulbhiwre/online_voting

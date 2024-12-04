@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ election.name }} - Election</title>
+</head>
+
+<body>
+    <h1>{{ election.name }} ({{ election.status }})</h1>
+
+    <h2>Options</h2>
+    <!-- if election.status is equal to complete then display list of candidates with voteshare, else only display candidates -->
+    <ul>
+        {% for option in options %}
+        <li>
+            <strong>{{ option.name }}</strong>
+            {% if election.status == "complete" %}
+            <span>{{ option.votes }} votes</span>
+            {% endif %}
+        </li>
+        {% endfor %}
+        <br>
+        <a href="/">Back to Dashboard</a>
+</body>
+
+</html>

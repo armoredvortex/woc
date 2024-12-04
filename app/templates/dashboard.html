@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Admin Dashboard</title>
+</head>
+
+<body>
+    <h1>Admin Dashboard</h1>
+    <a href="/create_election">Create New Election</a>
+    <h2>All Elections</h2>
+    <ul>
+        {% for election in elections %}
+        <li>
+            <strong>{{ election.name }}</strong> - {{ election.status }}
+            <a href="/election/{{ election.id }}">View</a>
+            {% if election.status == "Active" %}
+            <form action="/election/{{ election.id }}/close" method="POST" style="display:inline;">
+                <button type="submit">Close Election</button>
+            </form>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+
+</html>

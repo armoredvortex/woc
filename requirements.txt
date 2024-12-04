@@ -6,3 +6,5 @@ Psycopg2
 PyCryptodome
 Celery
 Marshmallow
+python-dotenv
+Flask-Migrate

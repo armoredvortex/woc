@@ -1,2 +1,4 @@
 dev-sandbox/*
 venv/*
+*.pyc
+.env

@@ -1,0 +1,52 @@
+body {
+    background-color: #121212;
+    color: #FFFFFF;
+    font-family: "Source Code Pro", monospace;
+}
+
+.container {
+    border: 1px solid #333;
+    width: fit-content;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+}
+
+a {
+    text-decoration: none;
+}
+
+.new {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+a {
+    color: #009862;
+    width: fit-content;
+    transition: 0.2s;
+}
+
+a:hover {
+    color: #00ff00;
+}
+
+.new i {
+    width: fit-content;
+    color: inherit;
+    /* margin-left: 5px; */
+}
+
+h2 {
+    width: fit-content;
+    margin-right: 10px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}

@@ -3,25 +3,39 @@
 
 <head>
     <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
+    </style>
+    <script src="https://kit.fontawesome.com/2b5d740196.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <h1>Admin Dashboard</h1>
-    <a href="/create_election">Create New Election</a>
-    <h2>All Elections</h2>
-    <ul>
-        {% for election in elections %}
-        <li>
-            <strong>{{ election.name }}</strong> - {{ election.status }}
-            <a href="/election/{{ election.id }}">View</a>
-            {% if election.status == "Active" %}
-            <form action="/election/{{ election.id }}/close" method="POST" style="display:inline;">
-                <button type="submit">Close Election</button>
-            </form>
-            {% endif %}
-        </li>
-        {% endfor %}
-    </ul>
+    <div class="container">
+        <h1 class="heading">Admin Dashboard</h1>
+
+        <div style="display: flex; flex-direction: row;">
+            <h2>Elections</h2>
+            <div class="new">
+                <a href="/create_election">
+                    New
+                    <i class="fa-solid fa-circle-plus"></i></a>
+            </div>
+        </div>
+        <ul>
+            {% for election in elections %}
+            <li>
+                <strong>{{ election.name }}</strong> - {{ election.status }}
+                <a href="/election/{{ election.id }}">View</a>
+                {% if election.status == "Active" %}
+                <form action="/election/{{ election.id }}/close" method="POST" style="display:inline;">
+                    <button type="submit">Close Election</button>
+                </form>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 
 </html>

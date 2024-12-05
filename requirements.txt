@@ -1,10 +1,6 @@
-Flask
-Flask-SQLAlchemy
-Flask-Migrate
-Flask-JWT-Extended
-Psycopg2
-PyCryptodome
-Celery
-Marshmallow
-python-dotenv
-Flask-Migrate
+cryptography==44.0.0
+Flask==3.1.0
+flask_sqlalchemy==3.1.1
+phe==1.5.0
+pycryptodome==3.21.0
+tenseal==0.3.15

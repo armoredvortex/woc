@@ -1,0 +1,62 @@
+===================================== Draft 1 =================================
+
+Let's say you have a secret that you need to share among your friend group of 3.
+However you only want it share it in a way such that the complete secret is only revealed
+once any 2 or more of you have gathered together.
+
+The most basic way would to divide in this sort of a fashion
+abc
+1) ab_
+2) a_c
+3) ab_
+
+While this is completely acceptable, this method has its flaws
+A single person alone with their part of the share can just either, makes sense of the
+missing information intuitively or in our case, would need only 26 tries.
+
+This is where Shamirs Secret Sharing Algorithm comes handy.
+It has huge advantages over the previously mentioned method since the individual shares
+on their own are worthless.
+
+To get started, we convert our string into an integer, this dosnt't change anything
+but only how the string is represented
+
+Now thinking about it geometrically
+A straight line needs two points to uniquely define it so why not use it to hide our data
+
+lets say the y-intercept of the line is our secret data.
+We then just generate a y-value (a random prime) when x = 1
+We connect both points and we get a line.
+
+Since we have the equation for the line, we can generate y-values at x=2, x=3 and so on...
+
+The points we generated become are shares.
+
+These individual shares are worthless on their own since a straight line passing through
+a single point can have any y-intercept on the real line.
+
+But if we have 2 or more of these shares, we can reconstruct the original line and hence get our
+original secret i.e the y-intercept of the line
+
+This method isn't just limited to straight lines, to uniquely define a polynomial of degree n,
+we need n+1 or more points.
+
+So if we need to share a secret with say n people with a threshold that a minimum of p people
+must come together to reveal the secret, we need a polynomial of degree p-1.
+=========================================================================================
+
+=================================Final Script===========================================
+Imagine you need to share a secret among three friends, but the secret should only be revealed if at least two people come together. One simple way is to split it like this: abc → ab_, a_c, _bc.
+
+But this has a flaw—anyone with their share can easily guess the missing part, maybe in just 26 tries.
+
+Enter Shamir’s Secret Sharing, which makes individual shares useless without collaboration. Here’s how it works:
+
+First, convert the secret into a number. Now, think geometrically—a straight line needs two points to define it. We treat the secret as the y-intercept of a line. To create the line, choose a random number for another point, say at x=1x=1, and connect it with the y-intercept.
+
+From this line, we can generate additional points at x=2,x=3x=2,x=3, and so on. These points become the individual shares. The beauty is that a single point is useless—it could correspond to infinite possible lines. But with two points, you can reconstruct the line and recover the secret.
+
+This concept can be extended to polynomials for greater security. To share a secret among nn people and require at least pp to reconstruct it, we use a degree-p−1p−1 polynomial. The secret is the constant term of the polynomial, and shares are points generated from it. Any group with at least pp points can reconstruct the polynomial and reveal the secret.
+
+Shamir’s Secret Sharing is mathematically elegant, secure, and customizable. It’s used in everything from secure backups to cryptocurrency wallets, ensuring secrets are safe but accessible when needed.
+=========================================================================================

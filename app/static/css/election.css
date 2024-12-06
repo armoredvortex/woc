@@ -1,0 +1,47 @@
+body {
+    background-color: #121212;
+    color: #FFFFFF;
+    font-family: "Source Code Pro", monospace;
+}
+
+.container {
+    border: 1px solid #333;
+    width: fit-content;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+}
+
+a {
+    text-decoration: none;
+}
+
+h2 {
+    margin: 0;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    grid-gap: 25px;
+}
+
+textarea {
+    width: 100%;
+    height: 100px;
+    resize: none;
+    background-color: #333;
+    border-color: #009862;
+    color: #FFFFFF;
+    /* white-space: nowrap; */
+    text-wrap: soft;
+}

@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect
 from app.models import db, Election, Option
 from app.utils import generate_keys, generate_shares
+import re
 
 
 # Define Blueprint
@@ -41,5 +42,8 @@ def create_election():
 @main_bp.route('/election/<int:election_id>', methods=['GET', 'POST'])
 def election(election_id):
     election = Election.query.get(election_id)
+    shares_list = re.search(r'\[(.*?)\]', election.shares).group(1)
+    shares_list = shares_list.split(', ')
     options = Option.query.filter_by(election_id=election_id).all()
-    return render_template('election.html', election=election, options=options)
+    election.shares = "Hidden"
+    return render_template('election.html', election=election, options=options, shares=shares_list)

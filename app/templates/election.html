@@ -5,24 +5,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ election.name }} - Election</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/election.css') }}">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
+    </style>
+    <script src="https://kit.fontawesome.com/2b5d740196.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <h1>{{ election.name }} ({{ election.status }})</h1>
+    <div class="container">
+        <div class="grid">
+            <div>
+                <h1>{{ election.name }} ({{ election.status }})</h1>
 
-    <h2>Options</h2>
-    <!-- if election.status is equal to complete then display list of candidates with voteshare, else only display candidates -->
-    <ul>
-        {% for option in options %}
-        <li>
-            <strong>{{ option.name }}</strong>
-            {% if election.status == "complete" %}
-            <span>{{ option.votes }} votes</span>
-            {% endif %}
-        </li>
-        {% endfor %}
-        <br>
-        <a href="/">Back to Dashboard</a>
+                <h2>Options</h2>
+                <!-- if election.status is equal to complete then display list of candidates with voteshare, else only display candidates -->
+                <ul>
+                    {% for option in options %}
+                    <li>
+                        <strong>{{ option.name }}</strong>
+                        {% if election.status == "complete" %}
+                        <span>{{ option.votes }} votes</span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                    <br>
+                    <a href="/">Back to Dashboard</a>
+                </ul>
+            </div>
+            <!-- make textboxes which are scrollable and loop through shares array and store its content in those boxes-->
+            <!-- <div class="shares">
+                {% for share in shares %}
+                <h2>Share {{i}}</h2>
+                <div class="share">
+                    <textarea readonly>{{ share}}</textarea>
+                </div>
+                {% endfor %}
+            </div> -->
+            <!-- for loop with i = o to i = 2 -->
+            <div class="shares">
+                {% for i in range(1,4) %}
+                <h2>Share {{i}}</h2>
+                <div class="share">
+                    <textarea readonly>{{ shares[i-1][1:-1] }}</textarea>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, request, redirect
 from app.models import db, Election, Option
+from app.utils import generate_keys, generate_shares
+
 
 # Define Blueprint
 main_bp = Blueprint('main', __name__)
@@ -16,11 +18,14 @@ def create_election():
     if request.method == 'POST':
         election_name = request.form['title']
         candidates = request.form.getlist('candidates[]')
-        # Store in database
-        new_election = Election(name=election_name)
+
+        public_key_json, private_key_json = generate_keys()
+        shares = generate_shares(private_key_json)
+        
+        new_election = Election(name=election_name, public_key=public_key_json, shares=shares)
         db.session.add(new_election)
         db.session.commit()
-
+        
         # Add options to the database
         for candidate in candidates:
             if candidate:

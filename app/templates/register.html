@@ -1,0 +1,88 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Create Election</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/create_election.css') }}">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
+    </style>
+    <script src="https://kit.fontawesome.com/2b5d740196.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Create New Election</h1>
+        <form method="POST">
+            <label for="title">Election Title:</label>
+            <input type="text" id="title" name="title" required><br><br>
+
+            <h3>Candidates</h3>
+            <div id="candidates">
+                <input type="text" name="candidates[]" placeholder="Candidate Name" required><br>
+            </div>
+            <button type="button" onclick="addCandidate()">Add Candidate</button><br><br>
+            <button type="submit">Create</button>
+        </form>
+    </div>
+    <script>
+        function addCandidate() {
+            const candidatesDiv = document.getElementById('candidates');
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.name = 'candidates[]';
+            input.placeholder = 'Candidate Name';
+            candidatesDiv.appendChild(input);
+            candidatesDiv.appendChild(document.createElement('br'));
+        }
+    </script>
+</body>
+
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
+    </style>
+    <script src="https://kit.fontawesome.com/2b5d740196.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Register</h1>
+        {% if email_exists %}
+        <p style="color: red;">Email already exists</p>
+        {% endif %}
+        <form method="POST">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required><br><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required><br><br>
+            <label for="confirm_password">Confirm Password:</label>
+            <input type="password" id="confirm_password" name="confirm_password" required><br><br>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+    <script>
+        const password = document.getElementById('password');
+        const confirm_password = document.getElementById('confirm_password');
+
+        function validatePassword() {
+            if (password.value !== confirm_password.value) {
+                confirm_password.setCustomValidity('Passwords do not match');
+            } else {
+                confirm_password.setCustomValidity('');
+            }
+        }
+
+        password.onchange = validatePassword;
+        confirm_password.onkeyup = validatePassword;
+    </script>
+</body>
+
+</html>

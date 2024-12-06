@@ -30,19 +30,10 @@
                     </li>
                     {% endfor %}
                     <br>
-                    <a href="/">Back to Dashboard</a>
+                    <a href="/admin">Back to Dashboard</a>
                 </ul>
             </div>
-            <!-- make textboxes which are scrollable and loop through shares array and store its content in those boxes-->
-            <!-- <div class="shares">
-                {% for share in shares %}
-                <h2>Share {{i}}</h2>
-                <div class="share">
-                    <textarea readonly>{{ share}}</textarea>
-                </div>
-                {% endfor %}
-            </div> -->
-            <!-- for loop with i = o to i = 2 -->
+
             <div class="shares">
                 {% for i in range(1,4) %}
                 <h2>Share {{i}}</h2>

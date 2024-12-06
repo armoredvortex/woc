@@ -15,3 +15,10 @@ class Option(db.Model):
     name = db.Column(db.String(100), nullable=False)
     election_id = db.Column(db.Integer, db.ForeignKey('election.id'), nullable=False)
     votes = db.Column(db.Integer, default=0)
+    
+class Candidate(db.Model):
+    __tablename__ = 'candidate'
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(100), nullable=False)
+    password = db.Column(db.String(100), nullable=False)
+    salt = db.Column(db.String(5), nullable=False)

@@ -22,3 +22,4 @@ class Candidate(db.Model):
     email = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(100), nullable=False)
     salt = db.Column(db.String(5), nullable=False)
+    session_token = db.Column(db.String(100), nullable=True)

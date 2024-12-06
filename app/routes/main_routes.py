@@ -1,8 +1,9 @@
-from flask import Blueprint, render_template, request, redirect
+from flask import Blueprint, render_template, request, redirect, session
 from app.models import db, Election, Option, Candidate
 from app.utils import generate_keys, generate_shares, hash_data
 import re
 import random
+import uuid
 
 
 # Define Blueprint
@@ -70,3 +71,48 @@ def register():
         return redirect('/login')
         
     return render_template('register.html')
+
+@main_bp.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        
+        hashed_email = hash_data(email)
+        candidate = Candidate.query.filter_by(email=hashed_email).first()
+        if not candidate:
+            return render_template('login.html', email_not_found=True)
+        
+        hashed_password = hash_data(password, candidate.salt)
+        if hashed_password == candidate.password:
+            # generate session token
+            session_token = str(uuid.uuid4())
+            candidate.session_token = session_token
+            db.session.commit()
+            
+            session['session_token'] = session_token
+            session['user_id'] = candidate.id
+            session.permanent = True
+            
+            return redirect('/vote')
+            
+        else:
+            return render_template('login.html', password_incorrect=True)
+        
+    return render_template('login.html')
+
+@main_bp.route('/vote', methods=['GET', 'POST'])
+def vote():
+    session_token = session.get('session_token')
+    user_id = session.get('user_id')
+
+    if not session_token or not user_id:
+        return redirect('/login')  # Redirect if no session
+
+    # Validate session token with the database
+    candidate = Candidate.query.filter_by(id=user_id, session_token=session_token).first()
+    if not candidate:
+        return redirect('/login')  # Redirect if invalid session
+
+    elections = Election.query.all()
+    return render_template('vote.html', elections=election )

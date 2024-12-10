@@ -4,6 +4,22 @@
     <title>Vote</title>
 </head>
 
-<body></body>
+<body>
+    <h1> Elections </h1>
+    <h2> Pick an election to vote in </h2>
+    <ul>
+        {% for election in elections %}
+        <li>
+            <!-- show only if election.status == active -->
+            {% if election.status == 'active' %}
+            <strong>{{ election.name }}</strong> - {{ election.status }}
+            <a href="/vote/{{ election.id }}">Vote</a>
+            {% endif %}
+            <!-- <strong>{{ election.name }}</strong> - {{ election.status }}
+            <a href="/vote/{{ election.id }}">Vote</a> -->
+        </li>
+        {% endfor %}
+    </ul>
+</body>
 
 </html>

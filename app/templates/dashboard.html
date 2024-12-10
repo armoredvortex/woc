@@ -4,6 +4,8 @@
 <head>
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
     </style>
@@ -27,11 +29,11 @@
             <li>
                 <strong>{{ election.name }}</strong> - {{ election.status }}
                 <a href="/election/{{ election.id }}">View</a>
-                {% if election.status == "Active" %}
+                <!-- {% if election.status == "Active" %}
                 <form action="/election/{{ election.id }}/close" method="POST" style="display:inline;">
                     <button type="submit">Close Election</button>
                 </form>
-                {% endif %}
+                {% endif %} -->
             </li>
             {% endfor %}
         </ul>

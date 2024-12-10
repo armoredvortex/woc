@@ -1,7 +1,7 @@
 ===================================== Draft 1 =================================
 
 Let's say you have a secret that you need to share among your friend group of 3.
-However you only want it share it in a way such that the complete secret is only revealed
+However you only want it to share it in a way such that the complete secret is only revealed
 once any 2 or more of you have gathered together.
 
 The most basic way would to divide in this sort of a fashion
@@ -30,7 +30,7 @@ We connect both points and we get a line.
 
 Since we have the equation for the line, we can generate y-values at x=2, x=3 and so on...
 
-The points we generated become are shares.
+The points we generated become our shares.
 
 These individual shares are worthless on their own since a straight line passing through
 a single point can have any y-intercept on the real line.
@@ -52,11 +52,9 @@ But this has a flaw—anyone with their share can easily guess the missing part,
 
 Enter Shamir’s Secret Sharing, which makes individual shares useless without collaboration. Here’s how it works:
 
-First, convert the secret into a number. Now, think geometrically—a straight line needs two points to define it. We treat the secret as the y-intercept of a line. To create the line, choose a random number for another point, say at x=1x=1, and connect it with the y-intercept.
+First, convert the secret into a number. Now, think geometrically—a straight line needs two points to define it. We treat the secret as the y-intercept of a line. To create the line, choose a random number for another point, say at x=1, and connect it with the y-intercept.
 
-From this line, we can generate additional points at x=2,x=3x=2,x=3, and so on. These points become the individual shares. The beauty is that a single point is useless—it could correspond to infinite possible lines. But with two points, you can reconstruct the line and recover the secret.
+From this line, we can generate additional points at x=2, x=3, and so on. These points become the individual shares. The beauty is that a single point is useless—it could correspond to infinite possible lines. But with two points, you can reconstruct the line and recover the secret.
 
-This concept can be extended to polynomials for greater security. To share a secret among nn people and require at least pp to reconstruct it, we use a degree-p−1p−1 polynomial. The secret is the constant term of the polynomial, and shares are points generated from it. Any group with at least pp points can reconstruct the polynomial and reveal the secret.
-
-Shamir’s Secret Sharing is mathematically elegant, secure, and customizable. It’s used in everything from secure backups to cryptocurrency wallets, ensuring secrets are safe but accessible when needed.
+This concept can be extended to polynomials as well. To share a secret among n people requiring at least p people to reconstruct it, we use a polynomial of degree p-1. The secret is the constant term of the polynomial, and shares are points generated from it. Any group with at least p points can reconstruct the polynomial and reveal the secret.
 =========================================================================================

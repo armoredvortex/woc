@@ -36,3 +36,17 @@ button {
     margin: 5px;
     cursor: pointer;
 }
+
+a {
+    color: #009862;
+    width: fit-content;
+    transition: 0.2s;
+}
+
+a:hover {
+    color: #00ff00;
+}
+
+a {
+    text-decoration: none;
+}

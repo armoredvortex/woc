@@ -123,7 +123,20 @@ def vote():
         return redirect('/login')  # Redirect if invalid session
 
     elections = Election.query.all()
-    return render_template('vote.html', elections=elections, candidate=candidate)
+    
+    allowed_elections = []
+    voted_elections = []
+    # remove election from list if candidate has already voted
+    for election in elections:
+        print(f"{election.id} {candidate.id}")
+        vote = Votes.query.filter_by(candidate_id=candidate.id, election_id=election.id).first()
+        print(f"{vote.id}")
+        if not vote:
+            allowed_elections.append(election)
+        else:
+            voted_elections.append(election)
+
+    return render_template('vote.html', allowed_elections=allowed_elections, voted_elections=voted_elections, candidate=candidate)
 
 @main_bp.route('/vote/<int:election_id>', methods=['GET', 'POST'])
 def vote_election(election_id):
@@ -148,7 +161,6 @@ def vote_election(election_id):
 
         vote_array = encrypt_vote_vector(public_key, vote_array)
         vote_b64 = base64.b64encode(pickle.dumps(vote_array))
-        print(vote_b64)
         new_vote = Votes(candidate_id=candidate.id, election_id=election_id, vote=vote_b64)
 
         db.session.add(new_vote)

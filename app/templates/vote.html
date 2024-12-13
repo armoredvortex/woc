@@ -14,15 +14,20 @@
         <h1> Elections </h1>
         <h2> Pick an election to vote in </h2>
         <ul>
-            {% for election in elections %}
+            {% for election in allowed_elections %}
             <li>
-                <!-- show only if election.status == active -->
                 {% if election.status == 'active' %}
                 <strong>{{ election.name }}</strong> - {{ election.status }}
                 <a href="/vote/{{ election.id }}">Vote</a>
                 {% endif %}
-                <!-- <strong>{{ election.name }}</strong> - {{ election.status }}
-            <a href="/vote/{{ election.id }}">Vote</a> -->
+            </li>
+            {% endfor %}
+        </ul>
+        <h2> Past voted for </h2>
+        <ul>
+            {% for election in voted_elections %}
+            <li>
+                <strong>{{ election.name }}</strong> - {{ election.status }}
             </li>
             {% endfor %}
         </ul>

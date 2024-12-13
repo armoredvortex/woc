@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Vote {{ election.id }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
+    </style>
+    <script src="https://kit.fontawesome.com/2b5d740196.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Vote</h1>
+        <h2>{{ election.name }}</h2>
+        <form action="/vote/{{ election.id }}" method="POST">
+            <!-- <ul>
+                {% for option in options %}
+                <li>
+                    <input type="radio" id="{{ option.id }}" name="option" value="{{ option.id }}">
+                    <label for="{{ option.id }}">{{ option.name }}</label>
+                </li>
+                {% endfor %}
+            </ul> -->
+            <ul>
+                {% for i in range(0, length) %}
+                <li>
+                    <input type="radio" id="{{ options[i].id }}" name="option" value="{{ i }}">
+                    <label for="{{ options[i].id }}">{{ options[i].name }}</label>
+                </li>
+                {% endfor %}
+            </ul>
+            <button type="submit">Vote</button>
+        </form>
+    </div>
+</body>
+
+</html>

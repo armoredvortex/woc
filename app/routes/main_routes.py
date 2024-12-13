@@ -1,19 +1,27 @@
 from flask import Blueprint, render_template, request, redirect, session
-from app.models import db, Election, Option, Candidate
-from app.utils import generate_keys, generate_shares, hash_data
+from app.models import db, Election, Option, Candidate, Votes
+# import everything from app.utils
+from app.utils import *
 import re
 import random
 import uuid
+import pickle
+import base64
 
 
 # Define Blueprint
 main_bp = Blueprint('main', __name__)
 
-# Home/Dashboard route
-@main_bp.route('/admin')
+# Home route
+@main_bp.route('/')
 def home():
+    return render_template('home.html')
+
+# Admin Dashboard route
+@main_bp.route('/admin')
+def admin():
     elections = Election.query.all()
-    return render_template('dashboard.html', elections=elections)
+    return render_template('admin.html', elections=elections)
 
 # Create Election route
 @main_bp.route('/create_election', methods=['POST', 'GET'])
@@ -115,4 +123,36 @@ def vote():
         return redirect('/login')  # Redirect if invalid session
 
     elections = Election.query.all()
-    return render_template('vote.html', elections=election )
+    return render_template('vote.html', elections=elections, candidate=candidate)
+
+@main_bp.route('/vote/<int:election_id>', methods=['GET', 'POST'])
+def vote_election(election_id):
+    session_token = session.get('session_token')
+    user_id = session.get('user_id')
+
+    if not session_token or not user_id:
+        return redirect('/login')
+    
+    candidate = Candidate.query.filter_by(id=user_id, session_token=session_token).first()
+    if not candidate:
+        return redirect('/login')
+    
+    election = Election.query.get(election_id)
+    options = Option.query.filter_by(election_id=election_id).all()
+    public_key = reconstruct_public_key(election.public_key)
+
+    if request.method == 'POST':
+        vote = request.form['option']
+        vote_array = [0] * len(options)
+        vote_array[int(vote)] = 1
+
+        vote_array = encrypt_vote_vector(public_key, vote_array)
+        vote_b64 = base64.b64encode(pickle.dumps(vote_array))
+        print(vote_b64)
+        new_vote = Votes(candidate_id=candidate.id, election_id=election_id, vote=vote_b64)
+
+        db.session.add(new_vote)
+        db.session.commit()
+        return redirect('/vote')
+    
+    return render_template('vote_election.html', election=election, options=options, length=len(options))

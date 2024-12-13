@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
+    </style>
+    <script src="https://kit.fontawesome.com/2b5d740196.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div style="color: red;">
+            <b>Private Routes</b> <br>
+            | <br>
+            |-- <a href="/admin">/admin</a> <br>
+            |-- <a href="/create_election">/create_election</a> <br>
+            |-- <a href="/elections/{election_id}">/elections/{election_id}</a> <br>
+            <br>
+        </div>
+        <div style="color: yellow;">
+            <b>Semi-Public Routes</b> <br>
+            | <br>
+            |-- <a href="/vote">/vote</a> <br>
+            |-- <a href="/vote/{election_id}">/vote/{election_id}</a> <br>
+            <br>
+        </div>
+        <div style="color: lime;">
+            <b>Public Routes</b> <br>
+            | <br>
+            |-- <a href="/register">/register</a> <br>
+            |-- <a href="/login">/login</a> <br>
+        </div>
+        <!-- Make a webpage in sort of terminal file tree explaining the routes
+        <h1> Routes </h1>
+        |- /admin <br>
+        |- /create_election <br>
+        |- /elections/{election_id} <br>
+        | <br>
+        <div style="color: #00ff00;">
+            |- /register <br>
+            |- /login <br>
+            |- /vote <br>
+            |- /vote/{election_id} <br>
+        </div> -->
+    </div>
+</body>
+
+</html>

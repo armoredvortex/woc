@@ -23,3 +23,10 @@ class Candidate(db.Model):
     password = db.Column(db.String(100), nullable=False)
     salt = db.Column(db.String(5), nullable=False)
     session_token = db.Column(db.String(100), nullable=True)
+
+class Votes(db.Model):
+    __tablename__ = 'votes'
+    id = db.Column(db.Integer, primary_key=True)
+    candidate_id = db.Column(db.Integer, db.ForeignKey('candidate.id'), nullable=False)
+    election_id = db.Column(db.Integer, db.ForeignKey('election.id'), nullable=False)
+    vote = db.Column(db.Text, nullable=False)

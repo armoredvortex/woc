@@ -2,24 +2,31 @@
 
 <head>
     <title>Vote</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
+    </style>
+    <script src="https://kit.fontawesome.com/2b5d740196.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <h1> Elections </h1>
-    <h2> Pick an election to vote in </h2>
-    <ul>
-        {% for election in elections %}
-        <li>
-            <!-- show only if election.status == active -->
-            {% if election.status == 'active' %}
-            <strong>{{ election.name }}</strong> - {{ election.status }}
-            <a href="/vote/{{ election.id }}">Vote</a>
-            {% endif %}
-            <!-- <strong>{{ election.name }}</strong> - {{ election.status }}
+    <div class="container">
+        <h1> Elections </h1>
+        <h2> Pick an election to vote in </h2>
+        <ul>
+            {% for election in elections %}
+            <li>
+                <!-- show only if election.status == active -->
+                {% if election.status == 'active' %}
+                <strong>{{ election.name }}</strong> - {{ election.status }}
+                <a href="/vote/{{ election.id }}">Vote</a>
+                {% endif %}
+                <!-- <strong>{{ election.name }}</strong> - {{ election.status }}
             <a href="/vote/{{ election.id }}">Vote</a> -->
-        </li>
-        {% endfor %}
-    </ul>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 
 </html>

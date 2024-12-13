@@ -50,3 +50,6 @@ def hash_data(data, salt=None):
     if salt:
         data += salt
     return hashlib.sha256(data.encode()).hexdigest()
+
+def encrypt_vote_vector(public_key, vote_vector):
+    return [public_key.encrypt(vote) for vote in vote_vector]

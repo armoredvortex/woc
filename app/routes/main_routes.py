@@ -30,10 +30,14 @@ def create_election():
         election_name = request.form['title']
         candidates = request.form.getlist('candidates[]')
 
-        public_key_json, private_key_json = generate_keys()
-        shares = generate_shares(private_key_json)
+        public_key, private_key = generate_keys()
         
-        new_election = Election(name=election_name, public_key=public_key_json, shares=shares)
+        public_key_b64 = base64.b64encode(pickle.dumps(public_key)).decode('utf-8')
+        private_key_b64 = base64.b64encode(pickle.dumps(private_key)).decode('utf-8')
+
+        shares = generate_shares(private_key_b64)
+        
+        new_election = Election(name=election_name, public_key=public_key_b64, shares=shares)
         db.session.add(new_election)
         db.session.commit()
         
@@ -130,7 +134,6 @@ def vote():
     for election in elections:
         print(f"{election.id} {candidate.id}")
         vote = Votes.query.filter_by(candidate_id=candidate.id, election_id=election.id).first()
-        print(f"{vote.id}")
         if not vote:
             allowed_elections.append(election)
         else:
@@ -152,7 +155,8 @@ def vote_election(election_id):
     
     election = Election.query.get(election_id)
     options = Option.query.filter_by(election_id=election_id).all()
-    public_key = reconstruct_public_key(election.public_key)
+    public_key_b64 = election.public_key
+    public_key = pickle.loads(base64.b64decode(public_key_b64))
 
     if request.method == 'POST':
         vote = request.form['option']
@@ -160,7 +164,7 @@ def vote_election(election_id):
         vote_array[int(vote)] = 1
 
         vote_array = encrypt_vote_vector(public_key, vote_array)
-        vote_b64 = base64.b64encode(pickle.dumps(vote_array))
+        vote_b64 = base64.b64encode(pickle.dumps(vote_array)).decode('utf-8')
         new_vote = Votes(candidate_id=candidate.id, election_id=election_id, vote=vote_b64)
 
         db.session.add(new_vote)
@@ -168,3 +172,28 @@ def vote_election(election_id):
         return redirect('/vote')
     
     return render_template('vote_election.html', election=election, options=options, length=len(options))
+
+@main_bp.route('/results/<int:election_id>')
+def results(election_id):
+    election = Election.query.get(election_id)
+    options = Option.query.filter_by(election_id=election_id).all()
+    public_key_b64 = election.public_key
+    public_key = pickle.loads(base64.b64decode(public_key_b64))
+
+    # convert str to json
+    shares = json.loads(election.shares)    
+    private_key_b64 = recover_secret(shares)
+
+    private_key = pickle.loads(base64.b64decode(private_key_b64))
+    votes = Votes.query.filter_by(election_id=election_id).all()
+    
+    # homomorphic addition of vote vectors
+    results = [0] * len(options)
+    for vote in votes:
+        vote_array = pickle.loads(base64.b64decode(vote.vote))
+        results = [x + y for x, y in zip(results, vote_array)]
+
+    results = decrypt_vote_vector(private_key, results)
+    print(results)
+
+    return render_template('results.html', election=election, options=options, results=results)

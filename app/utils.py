@@ -5,26 +5,8 @@ import hashlib
 
 def generate_keys():
     public_key, private_key = paillier.generate_paillier_keypair()
-        
-    public_key_json = json.dumps({
-        'n': public_key.n
-    })
-    
-    private_key_json = json.dumps({
-        'p': private_key.p,
-        'q': private_key.q
-    })
-    
-    return public_key_json, private_key_json
 
-# def reconstruct_keys(public_key_json, private_key_json):
-#     public_key_data = json.loads(public_key_json)
-#     private_key_data = json.loads(private_key_json)
-    
-#     public_key = paillier.PaillierPublicKey(n=int(public_key_data['n']))
-#     private_key = paillier.PaillierPrivateKey(public_key, p=int(private_key_data['p']), q=int(private_key_data['q']))
-    
-#     return public_key, private_key
+    return public_key, private_key
 
 def reconstruct_public_key(public_key_json):
     public_key_data = json.loads(public_key_json)
@@ -37,14 +19,17 @@ def reconstruct_private_key(public_key_json, private_key_json):
     private_key = paillier.PaillierPrivateKey(public_key, p=int(private_key_data['p']), q=int(private_key_data['q']))
     return private_key
 
-def generate_shares(private_key_json):
+def generate_shares(private_key_b64):
     quantity = 3
     threshold = 2
-    shares = shamir.to_base64(shamir.split_secret(private_key_json.encode(), threshold, quantity))
-    return str(shares)
+    # shares = shamir.to_base64(shamir.split_secret(private_key_b64.encode(), threshold, quantity))
+    shares = shamir.to_base64(shamir.split_secret(private_key_b64.encode(), threshold, quantity))
+
+    return json.dumps(shares)
     
 def recover_secret(shares):
-    return shamir.recover_secret(shamir.from_base64(shares)).decode()
+    shares = shamir.from_base64(shares)
+    return shamir.recover_secret(shares)
 
 def hash_data(data, salt=None):
     if salt:
@@ -53,3 +38,6 @@ def hash_data(data, salt=None):
 
 def encrypt_vote_vector(public_key, vote_vector):
     return [public_key.encrypt(vote) for vote in vote_vector]
+
+def decrypt_vote_vector(private_key, encrypted_vote_vector):
+    return [private_key.decrypt(vote) for vote in encrypted_vote_vector]

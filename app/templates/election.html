@@ -37,10 +37,13 @@
             </div>
 
             <div class="shares">
-                {% for i in range(1,4) %}
-                <h2>Share {{i}}</h2>
-                <div class="share">
-                    <textarea readonly>{{ shares[i-1][1:-1] }}</textarea>
+                <!-- loop through shares_count -->
+                {% for i in range(1, shares_count+1) %}
+                <div class="shares-container">
+                    <h2>Share {{i}}</h2>
+                    <div class="share">
+                        <textarea readonly>{{ shares[i-1][1:-1] }}</textarea>
+                    </div>
                 </div>
                 {% endfor %}
             </div>

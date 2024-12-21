@@ -7,9 +7,7 @@ def generate_keys():
     public_key, private_key = generate_paillier_keys(512)
     return public_key, private_key
 
-def generate_shares(private_key_b64):
-    quantity = 3
-    threshold = 2
+def generate_shares(private_key_b64, quantity, threshold):
     shares = shamir.to_base64(shamir.split_secret(private_key_b64.encode(), threshold, quantity))
 
     return json.dumps(shares)

@@ -2,14 +2,7 @@ h2 {
     margin: 0;
 }
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: 1fr;
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
-    grid-gap: 25px;
-}
+/* .grid {} */
 
 textarea {
     width: 100%;
@@ -21,3 +14,24 @@ textarea {
     /* white-space: nowrap; */
     text-wrap: soft;
 }
+
+.shares {
+    /* make a grid that has 4 columns elements filled from top horizontally*/
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
+    margin-top: 10px;
+
+}
+
+.shares-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+grid-gap: 10px;
+margin-top: 10px;

@@ -51,7 +51,9 @@ def create_election():
         public_key_b64 = base64.b64encode(pickle.dumps(public_key)).decode('utf-8')
         private_key_b64 = base64.b64encode(pickle.dumps(private_key)).decode('utf-8')
 
-        shares = generate_shares(private_key_b64)
+        shares_count = request.form['shares']
+        threshold = request.form['threshold']
+        shares = generate_shares(private_key_b64, int(shares_count), int(threshold))
         
         new_election = Election(name=election_name, public_key=public_key_b64, shares=shares)
         db.session.add(new_election)
@@ -75,8 +77,8 @@ def election(election_id):
     shares_list = re.search(r'\[(.*?)\]', election.shares).group(1)
     shares_list = shares_list.split(', ')
     options = Option.query.filter_by(election_id=election_id).all()
-    election.shares = "Hidden"
-    return render_template('election.html', election=election, options=options, shares=shares_list)
+    shares_count = len(shares_list)
+    return render_template('election.html', election=election, options=options, shares=shares_list, shares_count=shares_count)
 
 @main_bp.route('/register', methods=['GET', 'POST'])
 def register():    

@@ -7,6 +7,7 @@ body {
 .container {
     border: 1px solid #333;
     width: fit-content;
+    min-width: 300px;
     padding: 20px;
     border-radius: 10px;
     display: flex;

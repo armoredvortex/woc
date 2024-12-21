@@ -29,4 +29,5 @@ textarea {
     flex-direction: column;
     justify-content: space-between;
     margin-top: 10px;
+    padding: 5px;
 }

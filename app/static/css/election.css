@@ -30,8 +30,3 @@ textarea {
     justify-content: space-between;
     margin-top: 10px;
 }
-
-display: grid;
-grid-template-columns: repeat(4, 1fr);
-grid-gap: 10px;
-margin-top: 10px;

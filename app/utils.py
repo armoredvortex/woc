@@ -1,28 +1,15 @@
-from phe import paillier
+from app.paillier import *
 import json
 from sslib import shamir
 import hashlib
 
 def generate_keys():
-    public_key, private_key = paillier.generate_paillier_keypair()
-
+    public_key, private_key = generate_paillier_keys(512)
     return public_key, private_key
-
-def reconstruct_public_key(public_key_json):
-    public_key_data = json.loads(public_key_json)
-    public_key = paillier.PaillierPublicKey(n=int(public_key_data['n']))
-    return public_key
-
-def reconstruct_private_key(public_key_json, private_key_json):
-    private_key_data = json.loads(private_key_json)
-    public_key = reconstruct_public_key(public_key_json)
-    private_key = paillier.PaillierPrivateKey(public_key, p=int(private_key_data['p']), q=int(private_key_data['q']))
-    return private_key
 
 def generate_shares(private_key_b64):
     quantity = 3
     threshold = 2
-    # shares = shamir.to_base64(shamir.split_secret(private_key_b64.encode(), threshold, quantity))
     shares = shamir.to_base64(shamir.split_secret(private_key_b64.encode(), threshold, quantity))
 
     return json.dumps(shares)
@@ -37,7 +24,18 @@ def hash_data(data, salt=None):
     return hashlib.sha256(data.encode()).hexdigest()
 
 def encrypt_vote_vector(public_key, vote_vector):
-    return [public_key.encrypt(vote) for vote in vote_vector]
+    return [encrypt(public_key,vote) for vote in vote_vector]
+    # return [public_key.encrypt(vote) for vote in vote_vector]
 
-def decrypt_vote_vector(private_key, encrypted_vote_vector):
-    return [private_key.decrypt(vote) for vote in encrypted_vote_vector]
+def decrypt_vote_vector(private_key, public_key,encrypted_vote_vector):
+    return [decrypt(private_key,public_key,vote) for vote in encrypted_vote_vector]
+
+def homomorphic_add(public_key, ciphertext1, ciphertext2):
+    """Perform homomorphic addition on two ciphertexts."""
+    n, g = public_key
+    n_square = n * n
+
+    # Combine the ciphertexts using multiplication modulo n^2
+    combined_ciphertext = (ciphertext1 * ciphertext2) % n_square
+
+    return combined_ciphertext

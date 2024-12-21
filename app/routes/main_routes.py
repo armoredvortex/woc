@@ -12,6 +12,22 @@ import base64
 # Define Blueprint
 main_bp = Blueprint('main', __name__)
 
+# @main_bp.route('/test')
+# def test():
+#     public_key, private_key = generate_keys()
+#     v1 = encrypt_vote_vector(public_key, [1, 0, 1])
+#     v2 = encrypt_vote_vector(public_key, [0, 1, 0])
+
+#     print(decrypt_vote_vector(private_key, public_key, v1))
+#     print(decrypt_vote_vector(private_key, public_key, v2))
+
+#     # homomorphically add the two vectors
+#     result = [homomorphic_add(public_key,x,y) for x, y in zip(v1, v2)]
+    
+#     print(decrypt_vote_vector(private_key, public_key, result))
+    
+#     return 'test'
+
 # Home route
 @main_bp.route('/')
 def home():
@@ -193,7 +209,11 @@ def results(election_id):
         vote_array = pickle.loads(base64.b64decode(vote.vote))
         results = [x + y for x, y in zip(results, vote_array)]
 
-    results = decrypt_vote_vector(private_key, results)
-    print(results)
+    results = decrypt_vote_vector(private_key, public_key,results)
 
-    return render_template('results.html', election=election, options=options, results=results)
+    # loop through options and set option.vote in databse to results
+    for i, option in enumerate(options):
+        option.votes = results[i]
+        db.session.commit()
+
+    return render_template('results.html', election=election, options=options)

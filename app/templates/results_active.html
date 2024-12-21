@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
+    </style>
+    <script src="https://kit.fontawesome.com/2b5d740196.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>{{ election.name }} ({{election.status}})</h1>
+        <!-- make a form -->
+        <form method="post">
+            <label for="shares">Enter Shares (threshold = {{threshold}}): </label>
+            <br>
+            <!-- loop through threshold and make textboxes with id shares{i} -->
+            {% for i in range(1, threshold + 1) %}
+            <input type="text" id="shares{{ i }}" name="shares{{ i }}" required><br><br>
+            {% endfor %}
+            <!-- submit button -->
+            <button type="submit">Tally</button>
+        </form>
+    </div>
+</body>
+
+</html>

@@ -29,6 +29,7 @@
             <li>
                 <strong>{{ election.name }}</strong> - {{ election.status }}
                 <a href="/election/{{ election.id }}">View</a>
+                <a href="/results/{{ election.id }}">Results</a>
                 <!-- {% if election.status == "Active" %}
                 <form action="/election/{{ election.id }}/close" method="POST" style="display:inline;">
                     <button type="submit">Close Election</button>

@@ -77,6 +77,7 @@ def election(election_id):
     shares_list = re.search(r'\[(.*?)\]', election.shares).group(1)
     shares_list = shares_list.split(', ')
     options = Option.query.filter_by(election_id=election_id).all()
+    options = sorted(options, key=lambda x: x.id)
     shares_count = len(shares_list)
     return render_template('election.html', election=election, options=options, shares=shares_list, shares_count=shares_count)
 
@@ -173,6 +174,7 @@ def vote_election(election_id):
     
     election = Election.query.get(election_id)
     options = Option.query.filter_by(election_id=election_id).all()
+    options = sorted(options, key=lambda x: x.id)
     public_key_b64 = election.public_key
     public_key = pickle.loads(base64.b64decode(public_key_b64))
 
@@ -191,31 +193,92 @@ def vote_election(election_id):
     
     return render_template('vote_election.html', election=election, options=options, length=len(options))
 
-@main_bp.route('/results/<int:election_id>')
+# @main_bp.route('/results/<int:election_id>')
+# def results(election_id):
+    # election = Election.query.get(election_id)
+    
+    # options = Option.query.filter_by(election_id=election_id).all()
+    # options = sorted(options, key=lambda x: x.id)
+    # public_key_b64 = election.public_key
+    # public_key = pickle.loads(base64.b64decode(public_key_b64))
+
+    # # convert str to json
+    # shares = json.loads(election.shares)    
+    # private_key_b64 = recover_secret(shares)
+
+    # private_key = pickle.loads(base64.b64decode(private_key_b64))
+    # votes = Votes.query.filter_by(election_id=election_id).all()
+    
+    # print(len(votes))
+    # # homomorphic addition of vote vectors
+    # results = []
+    # for vote in votes:
+    #     vote_array = pickle.loads(base64.b64decode(vote.vote))
+    #     print(decrypt_vote_vector(private_key, public_key, vote_array))
+    #     # check if results is empty
+    #     if not results:
+    #         results = vote_array
+    #     else:
+    #         results = [homomorphic_add(public_key, x, y) for x, y in zip(results, vote_array)]
+
+    # results = decrypt_vote_vector(private_key, public_key,results)
+
+    # # loop through options and set option.vote in databse to results
+    # print(results)
+    # for i, option in enumerate(options):
+    #     option.votes = results[i]
+    #     db.session.commit()
+
+    # return render_template('results.html', election=election, options=options)
+
+@main_bp.route('/results/<int:election_id>', methods=['GET', 'POST'])
 def results(election_id):
     election = Election.query.get(election_id)
+    shares = json.loads(election.shares)
+    threshold = shares['required_shares']
     options = Option.query.filter_by(election_id=election_id).all()
-    public_key_b64 = election.public_key
-    public_key = pickle.loads(base64.b64decode(public_key_b64))
+    options = sorted(options, key=lambda x: x.id)
 
-    # convert str to json
-    shares = json.loads(election.shares)    
-    private_key_b64 = recover_secret(shares)
+    if election.status == 'active':
+        if request.method == 'POST':
+            # loop through threshold
+            rcv_shares = []
+            for i in range(threshold):
+                rcv_shares.append(request.form[f'shares{i+1}'])
+            
+            received_shares = {
+                'required_shares': threshold,
+                'prime_mod': shares['prime_mod'],
+                'shares': rcv_shares
+            }
+            public_key = pickle.loads(base64.b64decode(election.public_key))
 
-    private_key = pickle.loads(base64.b64decode(private_key_b64))
-    votes = Votes.query.filter_by(election_id=election_id).all()
-    
-    # homomorphic addition of vote vectors
-    results = [0] * len(options)
-    for vote in votes:
-        vote_array = pickle.loads(base64.b64decode(vote.vote))
-        results = [x + y for x, y in zip(results, vote_array)]
+            private_key_b64 = recover_secret(received_shares)
+            private_key = pickle.loads(base64.b64decode(private_key_b64))
 
-    results = decrypt_vote_vector(private_key, public_key,results)
+            votes = Votes.query.filter_by(election_id=election_id).all()
 
-    # loop through options and set option.vote in databse to results
-    for i, option in enumerate(options):
-        option.votes = results[i]
-        db.session.commit()
+            results = []
+            for vote in votes:
+                vote_array = pickle.loads(base64.b64decode(vote.vote))
+                # check if results is empty
+                if not results:
+                    results = vote_array
+                else:
+                    results = [homomorphic_add(public_key, x, y) for x, y in zip(results, vote_array)]
+            
+            results = decrypt_vote_vector(private_key, public_key, results)
+            
+            # loop through options and set option.vote in databse to results
+            for i, option in enumerate(options):
+                option.votes = results[i]
+                db.session.commit()
 
-    return render_template('results.html', election=election, options=options)
+            election.status = 'closed'
+            db.session.commit()
+            return redirect('/admin')
+        return render_template('results_active.html', election=election, threshold=threshold)
+    else:
+        return render_template('results.html', election=election, options=options)
+
+            

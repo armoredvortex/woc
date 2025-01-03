@@ -77,7 +77,6 @@ def generate_paillier_keys(bitsize=512):
 
 
 def encrypt(public_key, plaintext):
-    """Encrypt a plaintext message using the Paillier cryptosystem."""
     n, g = public_key
     n_square = n * n
 
@@ -90,7 +89,6 @@ def encrypt(public_key, plaintext):
     return c
 
 def decrypt(private_key, public_key, ciphertext):
-    """Decrypt a ciphertext message using the Paillier cryptosystem."""
     n, g = public_key
     lambda_value, mu = private_key
     n_square = n * n

@@ -62,8 +62,8 @@ def generate_paillier_keys(bitsize=512):
     g = random.randint(1, n_square - 1)
 
     # ensure g is valid
-    # if gcd(l_function(pow(g, lambda_value, n_square), n), n) != 1:
-    #     raise ValueError("Iinvalid g value")
+    if gcd(l_function(pow(g, lambda_value, n_square), n), n) != 1:
+        raise ValueError("Iinvalid g value")
 
     # mu
     l_value = l_function(pow(g, lambda_value, n_square), n)
